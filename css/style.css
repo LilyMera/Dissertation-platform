@@ -118,6 +118,12 @@ body {
   margin-bottom: 16px;
 }
 
+#maze-canvas {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
 .editor-actions { margin-top: 16px; display: flex; gap: 12px; }
 
 button {
