@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CodeQuest — Learn Programming Fundamentals</title>
+  <link rel="stylesheet" href="css/style.css" />
+</head>
+<body>
+
+  <!-- ================= WELCOME SCREEN ================= -->
+  <section id="welcome-screen" class="screen active">
+    <header class="app-header">
+      <span class="logo">&lt;/&gt;</span>
+      <h1>CodeQuest</h1>
+    </header>
+
+    <div class="welcome-content">
+      <div class="mascot" id="mascot">🙂</div>
+      <div class="speech-bubble">
+        <p><strong>Hi there!</strong></p>
+        <p>Let's learn to code by moving through the maze. Pick a level to begin.</p>
+      </div>
+    </div>
+
+    <h2>Choose a level</h2>
+    <div class="level-selector" id="level-selector">
+      <!-- Level cards are rendered dynamically by js/main.js based on levels.js -->
+    </div>
+  </section>
+
+  <!-- ================= EDITOR SCREEN ================= -->
+  <section id="editor-screen" class="screen">
+    <header class="app-header level-header">
+      <span id="level-title">Level 1 · Sequences</span>
+      <span id="level-stars">☆ ☆ ☆</span>
+    </header>
+
+    <div class="editor-layout">
+      <div id="blockly-div"></div>
+
+      <div class="maze-panel">
+        <h3>Maze view</h3>
+        <canvas id="maze-canvas" width="300" height="300"></canvas>
+      </div>
+
+      <div class="feedback-panel" id="feedback-panel">
+        <h3>Feedback</h3>
+        <p id="feedback-text">Run your code to see if you reach the flag.</p>
+      </div>
+    </div>
+
+    <div class="editor-actions">
+      <button id="run-btn">Run</button>
+      <button id="reset-btn">Reset</button>
+      <button id="back-btn">← Back to levels</button>
+    </div>
+  </section>
+
+  <!-- ================= RESULT SCREEN ================= -->
+  <section id="result-screen" class="screen">
+    <div class="result-card">
+      <div id="result-icon" class="result-icon">🏆</div>
+      <h2 id="result-title">Level complete!</h2>
+      <div id="result-stars" class="result-stars">★ ★ ★</div>
+      <div class="result-actions">
+        <button id="retry-btn">Try again</button>
+        <button id="next-level-btn">Next level →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Blockly library (official CDN build) -->
+  <script src="https://unpkg.com/blockly/blockly.min.js"></script>
+
+  <!-- Project scripts -->
+  <script src="js/levels.js"></script>
+  <script src="js/blocks.js"></script>
+  <script src="js/maze.js"></script>
+  <script src="js/main.js"></script>
+</body>
+</html>

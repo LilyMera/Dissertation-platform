@@ -1,0 +1,151 @@
+/* ============================================
+   CodeQuest — base styles
+   Colour palette follows the retro wireframes
+   agreed on 11 Aug 2026 (see AE2 Design section)
+   ============================================ */
+
+:root {
+  --bg: #FDF6EC;
+  --border-strong: #854F0B;
+  --surface: #F5EFE6;
+  --coral: #F2703C;
+  --teal: #16A394;
+  --purple: #6E56CF;
+  --text: #2A1B08;
+  --text-secondary: #5C4630;
+  --text-muted: #8A7658;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: "Segoe UI", Arial, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  margin: 0;
+  padding: 24px;
+}
+
+.screen { display: none; }
+.screen.active { display: block; }
+
+.app-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: var(--coral);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 14px;
+  margin-bottom: 24px;
+}
+
+.app-header h1 { margin: 0; font-size: 22px; }
+.logo {
+  background: var(--surface);
+  color: var(--text);
+  border-radius: 50%;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+}
+
+.welcome-content {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.mascot {
+  width: 120px;
+  height: 120px;
+  background: var(--teal);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 48px;
+}
+
+.speech-bubble {
+  background: var(--surface);
+  border: 2px solid var(--border-strong);
+  border-radius: 14px;
+  padding: 16px 20px;
+}
+
+.level-selector {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.level-card {
+  background: var(--surface);
+  border: 3px solid var(--border-strong);
+  border-radius: 14px;
+  padding: 16px;
+  width: 160px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.level-card.active { background: var(--coral); color: white; }
+.level-card.locked { opacity: 0.6; cursor: not-allowed; }
+
+.editor-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 16px;
+}
+
+#blockly-div {
+  height: 420px;
+  border: 3px dashed var(--border-strong);
+  border-radius: 12px;
+  background: var(--surface);
+}
+
+.maze-panel, .feedback-panel {
+  background: var(--surface);
+  border: 2px solid var(--border-strong);
+  border-radius: 12px;
+  padding: 12px;
+  margin-bottom: 16px;
+}
+
+.editor-actions { margin-top: 16px; display: flex; gap: 12px; }
+
+button {
+  background: var(--teal);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#back-btn, #retry-btn {
+  background: var(--surface);
+  color: var(--text-secondary);
+  border: 2px solid var(--border-strong);
+}
+
+.result-card {
+  max-width: 420px;
+  margin: 60px auto;
+  text-align: center;
+  background: var(--surface);
+  border: 3px solid var(--border-strong);
+  border-radius: 16px;
+  padding: 32px;
+}
+
+.result-icon { font-size: 48px; }
+.result-stars { font-size: 24px; margin: 12px 0; }
+.result-actions { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
