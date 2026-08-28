@@ -1,27 +1,16 @@
 /* ============================================
    main.js
-   Wires up screen navigation and button events.
-   This part is mostly plumbing (showing/hiding screens) —
-   feel free to build on it directly rather than rewrite it.
-
-   Still TODO here:
-   - Render level cards into #level-selector from LEVELS
-   - Initialise the Blockly workspace on #blockly-div when
-     entering the editor screen
-   - Wire #run-btn to call runCode() from maze.js
-   - Wire #retry-btn / #next-level-btn on the result screen
+   Screen navigation, level selection, and wiring up
+   the Blockly workspace + Run/Reset/Back buttons.
    ============================================ */
+
+let workspace = null; // holds the active Blockly workspace
 
 function showScreen(id) {
   document.querySelectorAll(".screen").forEach((el) => el.classList.remove("active"));
   document.getElementById(id).classList.add("active");
 }
 
-document.getElementById("back-btn").addEventListener("click", () => {
-  showScreen("welcome-screen");
-});
-
-// Renders one clickable card per level, using the data in LEVELS (levels.js)
 function renderLevelCards() {
   const container = document.getElementById("level-selector");
   container.innerHTML = "";
@@ -30,7 +19,6 @@ function renderLevelCards() {
     const card = document.createElement("div");
     card.className = "level-card" + (level.locked ? " locked" : "");
     card.innerHTML = `<strong>Level ${level.id}</strong><br>${level.name}`;
-
     if (!level.locked) {
       card.addEventListener("click", () => openLevel(level.id));
     }
@@ -38,24 +26,54 @@ function renderLevelCards() {
   });
 }
 
-// Opens the editor screen for a given level and draws the maze + character.
-// NOTE: this does not set up the Blockly workspace yet — that is next.
 function openLevel(levelId) {
   const level = LEVELS.find((l) => l.id === levelId);
   document.getElementById("level-title").textContent = `Level ${level.id} · ${level.name}`;
+  document.getElementById("level-instructions").textContent = level.instructions;
   showScreen("editor-screen");
 
-  // Canvas needs to exist and be visible before we draw on it
   drawMaze(levelId);
   drawCharacter(level.start);
+
+  // Set up a fresh Blockly workspace each time we enter a level.
+  // (Disposing the old one first avoids memory leaks / duplicate workspaces.)
+  if (workspace) workspace.dispose();
+  workspace = Blockly.inject("blockly-div", {
+    toolbox: document.getElementById("toolbox"),
+    scrollbars: false,
+    trashcan: true,
+  });
 }
+
+document.getElementById("back-btn").addEventListener("click", () => {
+  showScreen("welcome-screen");
+});
+
+document.getElementById("run-btn").addEventListener("click", () => {
+  const code = Blockly.JavaScript.workspaceToCode(workspace);
+  if (!code.trim()) {
+    setFeedback("Drag some blocks in first!");
+    return;
+  }
+  runCode(code);
+});
+
+document.getElementById("reset-btn").addEventListener("click", () => {
+  drawCharacter(currentLevel.start);
+  setFeedback("Run your code to see if you reach the flag.");
+});
+
+document.getElementById("retry-btn").addEventListener("click", () => {
+  showScreen("editor-screen");
+  drawCharacter(currentLevel.start);
+  setFeedback("Run your code to see if you reach the flag.");
+});
+
+document.getElementById("next-level-btn").addEventListener("click", () => {
+  // TODO once Level 2 has a real grid: unlock and open it here.
+  showScreen("welcome-screen");
+});
 
 document.addEventListener("DOMContentLoaded", () => {
   renderLevelCards();
 });
-
-// TODO: wire run-btn once blocks.js is implemented (next session)
-document.getElementById("run-btn").addEventListener("click", () => {
-  console.log("TODO: get code from Blockly workspace and call runCode()");
-});
-

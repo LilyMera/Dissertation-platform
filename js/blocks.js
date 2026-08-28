@@ -1,26 +1,46 @@
 /* ============================================
    blocks.js
-   Defines the custom Blockly blocks children will use:
-   Move forward, Turn, Repeat (and later, If/Variable).
+   Defines the two custom blocks children will drag into
+   the workspace: "move forward" and "turn right".
+   The "repeat" block is not custom — we use Blockly's
+   own built-in block (controls_repeat_ext), which already
+   looks similar to the wireframe and saves us from writing
+   loop logic ourselves.
 
-   TODO (your implementation):
-   - Use Blockly.Blocks['move_forward'] = { init: function() {...} }
-     to define each block's shape, colour and connections.
-   - Use Blockly.JavaScript['move_forward'] = function(block) {...}
-     to define what code each block generates when run.
-   - Official Blockly docs for defining custom blocks:
-     https://developers.google.com/blockly/guides/create-custom-blocks/overview
-   - Keep the toolbox XML (which blocks are available per level)
-     here too, so it's easy to show fewer blocks on Level 1.
+   Every Blockly block has TWO parts:
+   1. Blockly.Blocks[...] — defines what the block looks like
+      (its shape, text, colour, and how it connects to others).
+   2. Blockly.JavaScript[...] — defines what line(s) of JS code
+      the block should produce when the workspace is converted
+      to code. We don't run real movement logic here — we just
+      output a call to a function (moveForward(), turnRight())
+      that we define ourselves in maze.js.
    ============================================ */
 
-// Example of the shape you'll need to fill in (NOT implemented yet):
-//
-// Blockly.Blocks['move_forward'] = {
-//   init: function () {
-//     this.appendDummyInput().appendField("move forward");
-//     this.setPreviousStatement(true, null);
-//     this.setNextStatement(true, null);
-//     this.setColour(170); // matches --teal in the wireframes
-//   },
-// };
+Blockly.Blocks["move_forward"] = {
+  init: function () {
+    this.appendDummyInput().appendField("move forward");
+    this.setPreviousStatement(true, null); // can connect below another block
+    this.setNextStatement(true, null); // can have another block connect below it
+    this.setColour(170); // teal-ish, matches the wireframes
+    this.setTooltip("Moves the character one step forward.");
+  },
+};
+
+Blockly.JavaScript.forBlock["move_forward"] = function (block, generator) { 
+  return "moveForward();\n";
+};
+
+Blockly.Blocks["turn_right"] = {
+  init: function () {
+    this.appendDummyInput().appendField("turn right");
+    this.setPreviousStatement(true, null);
+    this.setNextStatement(true, null);
+    this.setColour(170);
+    this.setTooltip("Turns the character 90° to the right.");
+  },
+};
+
+Blockly.JavaScript.forBlock["turn_right"] = function (block, generator) {
+  return "turnRight();\n";
+};
