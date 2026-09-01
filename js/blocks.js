@@ -27,8 +27,8 @@ Blockly.Blocks["move_forward"] = {
   },
 };
 
-Blockly.JavaScript.forBlock["move_forward"] = function (block, generator) { 
-  return "moveForward();\n";
+Blockly.JavaScript.forBlock["move_forward"] = function (block, generator) {
+  return "await moveForward();\n";
 };
 
 Blockly.Blocks["turn_right"] = {
@@ -42,5 +42,17 @@ Blockly.Blocks["turn_right"] = {
 };
 
 Blockly.JavaScript.forBlock["turn_right"] = function (block, generator) {
-  return "turnRight();\n";
+  return "await turnRight();\n";
+};
+Blockly.Blocks["wall_ahead"] = {
+  init: function () {
+    this.appendDummyInput().appendField("wall ahead?");
+    this.setOutput(true, "Boolean"); // this block returns a value (true/false) rather than connecting to other blocks
+    this.setColour(210);
+    this.setTooltip("True if there is a wall directly in front of the character.");
+  },
+};
+
+Blockly.JavaScript.forBlock["wall_ahead"] = function (block, generator) {
+  return ["isWallAhead()", 0];
 };

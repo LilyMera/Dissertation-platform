@@ -18,7 +18,7 @@ function renderLevelCards() {
   LEVELS.forEach((level) => {
     const card = document.createElement("div");
     card.className = "level-card" + (level.locked ? " locked" : "");
-    card.innerHTML = `<strong>Level ${level.id}</strong><br>${level.name}`;
+    card.innerHTML = `Level ${level.id}<span class="level-sub">${level.name}</span>`;
     if (!level.locked) {
       card.addEventListener("click", () => openLevel(level.id));
     }
@@ -29,7 +29,7 @@ function renderLevelCards() {
 function openLevel(levelId) {
   const level = LEVELS.find((l) => l.id === levelId);
   document.getElementById("level-title").textContent = `Level ${level.id} · ${level.name}`;
-  document.getElementById("level-instructions").textContent = level.instructions;
+  document.getElementById("level-instructions").textContent = level.instructions || "";
   showScreen("editor-screen");
 
   drawMaze(levelId);
