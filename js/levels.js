@@ -29,13 +29,17 @@ const LEVELS = [
   {
     id: 2,
     name: "Loops",
-    // TODO: design a maze where the same short pattern repeats
-    // several times — this is what makes a loop useful here.
-    grid: null,
-    start: null,
-    goal: null,
-    locked: true,
+    instructions: "🏁 This path is longer — try using the 'repeat' block instead of many 'move forward' blocks!",
+    grid: [
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    ],
+    start: { row: 1, col: 1 },
+    goal: { row: 1, col: 9 },
+    locked: false,
   },
+  
   {
     id: 3,
     name: "Conditionals",
