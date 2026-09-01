@@ -1,7 +1,5 @@
 /* ============================================
    CodeQuest — base styles
-   Colour palette follows the retro wireframes
-   agreed on 11 Aug 2026 (see AE2 Design section)
    ============================================ */
 
 :root {
@@ -151,7 +149,14 @@ button {
   border-radius: 16px;
   padding: 32px;
 }
-
+.instructions{
+  background: var(--surface);
+  border: 2px dashed var(--border-strong);
+  border-radius: 10px;
+  padding: 10px 16px;
+  margin-bottom: 12px;
+  font-weight: 500;
+}
 .result-icon { font-size: 48px; }
 .result-stars { font-size: 24px; margin: 12px 0; }
 .result-actions { display: flex; gap: 12px; justify-content: center; margin-top: 16px; }
