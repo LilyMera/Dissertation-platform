@@ -4,11 +4,20 @@
 
    HOW EXECUTION WORKS (important to understand for your
    Implementation write-up):
-   Each block's function (moveForward, turnRight) is async and
-   actually moves the character immediately, then pauses briefly
-   (await + a Promise) so the animation is visible on screen and
-   so isWallAhead() always reflects the character's true current
-   position while the program is running.
+   1. Blockly.JavaScript.workspaceToCode() turns the blocks
+      into a plain JS text string, e.g.:
+         moveForward();
+         moveForward();
+         turnRight();
+   2. We can't just eval() that and expect animation, because
+      eval() runs instantly — the character would "teleport"
+      instead of stepping visibly through the maze.
+   3. So moveForward() and turnRight() don't move the character
+      directly. Instead, they push an instruction onto a queue
+      (actionQueue). This is sometimes called a "command pattern".
+   4. Once the whole program has run (and the queue is full of
+      instructions), we animate through the queue one instruction
+      at a time using setInterval, updating the canvas each step.
    ============================================ */
 
 const CELL_SIZE = 40;
@@ -35,5 +44,145 @@ function drawMaze(levelId) {
     row.forEach((cell, colIndex) => {
       const x = colIndex * CELL_SIZE;
       const y = rowIndex * CELL_SIZE;
-      ctx.fillStyle = cell === 1 ? "#854F0B" :
-      
+      ctx.fillStyle = cell === 1 ? "#854F0B" : "#F5EFE6";
+      ctx.fillRect(x, y, CELL_SIZE, CELL_SIZE);
+      ctx.strokeStyle = "#D9CBB5";
+      ctx.strokeRect(x, y, CELL_SIZE, CELL_SIZE);
+    });
+  });
+
+  const goalX = currentLevel.goal.col * CELL_SIZE;
+  const goalY = currentLevel.goal.row * CELL_SIZE;
+  ctx.fillStyle = "#F2703C";
+  ctx.beginPath();
+  ctx.moveTo(goalX + CELL_SIZE / 2, goalY + 8);
+  ctx.lineTo(goalX + CELL_SIZE - 10, goalY + CELL_SIZE / 4);
+  ctx.lineTo(goalX + CELL_SIZE / 2, goalY + CELL_SIZE / 2);
+  ctx.fill();
+}
+
+// Draws the maze walls/path fresh, then the character on top —
+// this is what lets the character appear to "move" between frames.
+function renderFrame() {
+  drawMaze(currentLevel.id);
+
+  const canvas = document.getElementById("maze-canvas");
+  const ctx = canvas.getContext("2d");
+  const x = character.col * CELL_SIZE + CELL_SIZE / 2;
+  const y = character.row * CELL_SIZE + CELL_SIZE / 2;
+
+  ctx.fillStyle = "#16A394";
+  ctx.beginPath();
+  ctx.arc(x, y, CELL_SIZE / 3, 0, Math.PI * 2);
+  ctx.fill();
+
+  // Small line showing which way the character is facing
+  const vec = DIRECTION_VECTORS[character.direction];
+  ctx.strokeStyle = "#04342C";
+  ctx.lineWidth = 3;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x + vec.dc * 14, y + vec.dr * 14);
+  ctx.stroke();
+}
+
+function drawCharacter(position) {
+  character = { ...position, direction: 0 };
+  renderFrame();
+}
+
+// These functions are what the generated code calls — but now they
+// move the character for real, one step at a time, and PAUSE
+// (using await + a Promise) so the animation is visible and so
+// isWallAhead() always reflects the character's true current position.
+// This replaces the old "queue everything, animate later" approach,
+// which could not support a block like "if wall ahead" — that block
+// needs to check the REAL position while the program is running,
+// not a position calculated in advance.
+
+function wait(ms) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+async function moveForward() {
+  const vec = DIRECTION_VECTORS[character.direction];
+  const nextRow = character.row + vec.dr;
+  const nextCol = character.col + vec.dc;
+  const nextCell = currentLevel.grid[nextRow] && currentLevel.grid[nextRow][nextCol];
+
+  if (nextCell === undefined || nextCell === 1) {
+    throw new Error("bumped into a wall");
+  }
+
+  character.row = nextRow;
+  character.col = nextCol;
+  renderFrame();
+  await wait(500);
+}
+
+async function turnRight() {
+  character.direction = (character.direction + 90) % 360;
+  renderFrame();
+  await wait(500);
+}
+
+// Used by the "wall ahead?" block. Not async — it just needs to
+// read the current state, no animation involved.
+function isWallAhead() {
+  const vec = DIRECTION_VECTORS[character.direction];
+  const nextRow = character.row + vec.dr;
+  const nextCol = character.col + vec.dc;
+  const nextCell = currentLevel.grid[nextRow] && currentLevel.grid[nextRow][nextCol];
+  return nextCell === undefined || nextCell === 1;
+}
+
+function setFeedback(text) {
+  document.getElementById("feedback-text").textContent = text;
+}
+
+async function runCode(generatedCode) {
+  character = { ...currentLevel.start, direction: 0 };
+  renderFrame();
+  setFeedback("Running...");
+
+  try {
+    // new Function builds a real async function out of the code
+    // Blockly generated, and explicitly hands it the three functions
+    // it's allowed to call — nothing else from this file leaks in.
+    const run = new Function(
+      "moveForward",
+      "turnRight",
+      "isWallAhead",
+      `return (async () => { ${generatedCode} })();`
+    );
+    await run(moveForward, turnRight, isWallAhead);
+    showResult(checkResult(character, currentLevel.goal));
+  } catch (err) {
+    setFeedback("Oops — " + err.message);
+    showResult("fail");
+  }
+}
+
+function checkResult(position, goal) {
+  return position.row === goal.row && position.col === goal.col ? "success" : "fail";
+}
+
+function showResult(result) {
+  showScreen("result-screen");
+  const icon = document.getElementById("result-icon");
+  const title = document.getElementById("result-title");
+  const stars = document.getElementById("result-stars");
+  const nextBtn = document.getElementById("next-level-btn");
+
+  if (result === "success") {
+    icon.textContent = "🏆";
+    title.textContent = "Level complete!";
+    stars.textContent = "★ ★ ★";
+    nextBtn.style.display = "inline-block";
+  } else {
+    icon.textContent = "😕";
+    title.textContent = "Oops, try again!";
+    stars.textContent = "";
+    nextBtn.style.display = "none";
+  }
+}
