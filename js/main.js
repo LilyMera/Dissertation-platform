@@ -38,11 +38,14 @@ function openLevel(levelId) {
   // Set up a fresh Blockly workspace each time we enter a level.
   // (Disposing the old one first avoids memory leaks / duplicate workspaces.)
   if (workspace) workspace.dispose();
-  workspace = Blockly.inject("blockly-div", {
+    workspace = Blockly.inject("blockly-div", {
     toolbox: document.getElementById("toolbox"),
     scrollbars: false,
     trashcan: true,
+    renderer: "zelos",
+    theme: Blockly.Themes.Zelos,
   });
+  
 }
 
 document.getElementById("back-btn").addEventListener("click", () => {
