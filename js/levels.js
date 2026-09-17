@@ -21,7 +21,7 @@ const LEVELS = [
   {
     id: 2,
     name: "Loops",
-    instructions: "🏁 This path is longer — try using the 'repeat' block instead of many 'move forward' blocks!",
+    instructions: "🏁 This path is longer possible try using the 'repeat' block instead of many 'move forward' blocks!",
     grid: [
       [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
@@ -34,9 +34,16 @@ const LEVELS = [
   {
     id: 3,
     name: "Conditionals",
-    grid: null,
-    start: null,
-    goal: null,
-    locked: true,
+    instructions: "🏁 This maze has a turn — use the 'if wall ahead' block to turn automatically!",
+    grid: [
+      [1, 1, 1, 1, 1, 1],
+      [1, 0, 0, 0, 0, 1],
+      [1, 1, 1, 1, 0, 1],
+      [1, 1, 1, 1, 0, 1],
+      [1, 1, 1, 1, 1, 1],
+    ],
+    start: { row: 1, col: 1 },
+    goal: { row: 3, col: 4 },
+    locked: false,
   },
 ];

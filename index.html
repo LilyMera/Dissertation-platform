@@ -11,12 +11,14 @@
   <!-- ================= WELCOME SCREEN ================= -->
   <section id="welcome-screen" class="screen active">
     <header class="app-header">
-      <span class="logo">&lt;/&gt;</span>
-      <h1>CodeQuest</h1>
+      <div style="display:flex;align-items:center;gap:12px">
+        <span class="logo">&lt;/&gt;</span>
+        <h1>CodeQuest</h1>
+      </div>
     </header>
 
     <div class="welcome-content">
-      <div class="mascot" id="mascot">🙂</div>
+      <div class="mascot" id="mascot">🧑‍🎓</div>
       <div class="speech-bubble">
         <p><strong>Hi there!</strong></p>
         <p>Let's learn to code by moving through the maze. Pick a level to begin.</p>
@@ -33,24 +35,31 @@
       <span id="level-title">Level 1 · Sequences</span>
       <span id="level-stars">☆ ☆ ☆</span>
     </header>
+
     <p id="level-instructions" class="instructions"></p>
 
     <div class="editor-layout">
-      <div id="blockly-div"></div>
-
-      <div class="maze-panel">
-        <h3>Maze view</h3>
-        <canvas id="maze-canvas" width="280" height="120"></canvas>
+      <div>
+        <p class="panel-label">Blocks &amp; coding area</p>
+        <div class="blockly-wrapper">
+          <div id="blockly-div"></div>
+        </div>
       </div>
 
-      <div class="feedback-panel" id="feedback-panel">
-        <h3>Feedback</h3>
-        <p id="feedback-text">Run your code to see if you reach the flag.</p>
+      <div class="side-column">
+        <div class="maze-panel">
+          <h3>Maze view</h3>
+          <canvas id="maze-canvas" width="280" height="120"></canvas>
+        </div>
+        <div class="feedback-panel">
+          <h3>Feedback</h3>
+          <p id="feedback-text">Run your code to see if you reach the flag.</p>
+        </div>
       </div>
     </div>
 
     <div class="editor-actions">
-      <button id="run-btn">Run</button>
+      <button id="run-btn">▶ Run</button>
       <button id="reset-btn">Reset</button>
       <button id="back-btn">← Back to levels</button>
     </div>
@@ -69,11 +78,12 @@
     </div>
   </section>
 
-  <!-- Blockly's toolbox: which blocks appear in the palette on the left.
-       This is plain XML that Blockly reads to build the palette UI. -->
+  <!-- Blockly's toolbox -->
   <xml id="toolbox" style="display: none">
     <block type="move_forward"></block>
     <block type="turn_right"></block>
+    <block type="wall_ahead"></block>
+    <block type="controls_if"></block>
     <block type="controls_repeat_ext">
       <value name="TIMES">
         <shadow type="math_number">
@@ -83,10 +93,8 @@
     </block>
   </xml>
 
-  <!-- Blockly library (official CDN build) -->
   <script src="https://unpkg.com/blockly/blockly.min.js"></script>
 
-  <!-- Project scripts -->
   <script src="js/levels.js"></script>
   <script src="js/blocks.js"></script>
   <script src="js/maze.js"></script>
