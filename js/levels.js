@@ -34,7 +34,7 @@ const LEVELS = [
   {
     id: 3,
     name: "Conditionals",
-    instructions: "🏁 This maze has a turn — use the 'if wall ahead' block to turn automatically!",
+    instructions: "🏁 This maze has a turn so  use the 'if wall ahead' block to turn automatically!",
     grid: [
       [1, 1, 1, 1, 1, 1],
       [1, 0, 0, 0, 0, 1],
