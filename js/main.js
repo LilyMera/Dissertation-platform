@@ -76,8 +76,15 @@ document.getElementById("retry-btn").addEventListener("click", () => {
 });
 
 document.getElementById("next-level-btn").addEventListener("click", () => {
-  // TODO once Level 2 has a real grid: unlock and open it here.
-  showScreen("welcome-screen");
+  const nextLevelId = currentLevel.id + 1;
+  const nextLevelExists = LEVELS.some((l) => l.id === nextLevelId);
+
+  if (nextLevelExists) {
+    openLevel(nextLevelId);
+  } else {
+    // No more levels — return to the welcome screen
+    showScreen("welcome-screen");
+  }
 });
 
 document.addEventListener("DOMContentLoaded", () => {
