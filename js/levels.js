@@ -1,9 +1,9 @@
-/* ============================================
-   levels.js
-   0 = open path, 1 = wall. Coordinates are {row, col},
-   starting at {0, 0} in the top-left corner.
-   ============================================ */
-
+// levels.js
+// Each level's maze is represented as a grid of numbers:
+// 0 = open path (walkable), 1 = wall (blocked).
+// {row, col} coordinates start at {0, 0} in the top-left corner.
+// "locked" controls whether the level is selectable from the
+// welcome screen.
 const LEVELS = [
   {
     id: 1,

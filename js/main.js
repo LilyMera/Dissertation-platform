@@ -25,7 +25,10 @@ function renderLevelCards() {
     container.appendChild(card);
   });
 }
-
+// Called when a level card is clicked. Draws the maze, resets the
+// character to the start position, and creates a fresh Blockly
+// workspace (disposing any previous one first, to avoid memory leaks
+// or duplicate workspaces if the user goes back and re-enters a level).
 function openLevel(levelId) {
   const level = LEVELS.find((l) => l.id === levelId);
   document.getElementById("level-title").textContent = `Level ${level.id} · ${level.name}`;

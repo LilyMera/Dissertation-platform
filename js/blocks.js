@@ -56,3 +56,9 @@ Blockly.Blocks["wall_ahead"] = {
 Blockly.JavaScript.forBlock["wall_ahead"] = function (block, generator) {
   return ["isWallAhead()", 0];
 };
+//  "wall_ahead?" is a value-returning block (Boolean), unlike move_forward
+// and turn_right which are action blocks. Because it answers a question
+// rather than performing a step, it uses setOutput() instead of
+// setPreviousStatement/setNextStatement, so it can be plugged into the
+// condition slot of an "if" block rather than connecting above/below
+// other blocks in a sequence.

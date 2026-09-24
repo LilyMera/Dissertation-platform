@@ -103,7 +103,12 @@ function drawCharacter(position) {
 function wait(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
-
+//// moveForward() and turnRight() are async so that generated code can
+// "await" them so  this makes the character actually finish moving
+// (with a visible animation delay) before the next instruction runs.
+// This was essential for Level 3: without it, isWallAhead() would
+// check the character's position before it had really moved,
+// making the check unreliable.
 async function moveForward() {
   const vec = DIRECTION_VECTORS[character.direction];
   const nextRow = character.row + vec.dr;
